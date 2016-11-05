@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}" media="screen" title="no title" charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Raleway" rel="stylesheet">
+
+
+</head>
+<style type="text/css">
+
+
+
+    .ui.vertical.basic.huge.segment{
+        height:200px;
+
+    }
+    .ui.three.borderless.item.menu{
+        width:400px !important;
+        border:rgba(255, 0, 0, 0);
+        position: absolute;
+        left: 50%;
+        top:60%;
+        transform: translate(-50%,-50%);
+    }
+</style>
+
+<body>
+    <div class="ui inverted top fixed menu borderless red menu">
+        <div class="header item">
+            <div class="ui image">
+                <img src="{% static 'images/tenlogo.png' %}" alt="">
+            </div>
+        </div>
+
+        <div class="right menu">
+            {% if request.user.is_authenticated %}
+                <div class="item">
+                    <h5 class="ui inverted header">
+                        <span style="margin-right:20px;">{{ request.user.username }}</span>
+                        <div class="ui mini circular image">
+                            {% if request.user.profile.profile_image %}
+                                <img src="/upload/{{ request.user.profile.profile_image }}" alt="" />
+                            {% else %}
+                                <img src="http://semantic-ui.com/images/avatar/small/matt.jpg" alt="" />
+                            {% endif %}
+                        </div>
+                    </h5>
+                </div>
+                <div class="item">
+                    <a href="{% url 'logout' %}" class="ui inverted circular button">Logout</a>
+                </div>
+
+            {% else %}
+                <div class="item">
+                    <h5 class="ui inverted header">
+                        <span style="margin-right:20px;">{{ request.user.username }}</span>
+                        <div class="ui mini circular image">
+                            <img src="http://semantic-ui.com/images/avatar/small/matt.jpg" alt="" />
+                        </div>
+                    </h5>
+                </div>
+                <div class="item">
+                    <a href="#" class="ui inverted circular button">Signup/Login</a>
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="ui vertical inverted detail segment"></div>
+    <div class="ui vertical basic huge segment">
+        <div class="ui three borderless item menu">
+            <a class="item">
+                <i class="theme icon"></i>
+                All
+            </a>
+            <a class="item">
+                <i class="rocket icon"></i>
+                New
+            </a>
+            {% if 'editors' in request.path %}
+                <a class="active green item" href="{% url 'index' %}/editors">
+                    <i class="bookmark icon"></i>
+                    Editor's
+                </a>
+            {% else %}
+                <a class="green item" href="{% url 'index' %}/editors">
+                    <i class="bookmark icon"></i>
+                    Editor's
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="ui basic segment container">
+        {% for article in article_list %}
+            <a href="{% url 'detail' article.id %}">
+                <h1 class="ui header">{{article.headline}}</h1>
+            </a>
+            <span>{{article.date|date:"Y-m-d"}}</span>
+            <span class="" style="color:rgb(226, 226, 226)">|</span>
+            <i class="icon grey unhide"></i>
+            <span style="color:#bbbbbb">10K</span>
+            <span class="" style="color:rgb(226, 226, 226)">|</span>
+            <i class="icon grey checkmark"></i>
+            <span style="color:#bbbbbb">5673 people got it</span>
+            <p>
+                {{article.content|truncatewords:100}}
+                <a href="{% url 'detail' article.id %}">
+                    <i class="angle tiny double grey right icon">READMORE</i>
+                </a>
+            </p>
+            <div class="ui divider"></div>
+
+            <form class="ui form" action="" method="post">
+
+                <button class="ui green tiny  button" type="submit" name="vote" value="like">
+
+
+                    来源：
+                    <i class="stack overflow icon"></i>
+                </button>
+
+                <!-- <button class="ui tiny button" type="submit" name="vote" value="normal">
+                    <i class="caret down icon "></i>
+                    反对
+                </button>
+
+                <button class="ui secondary circular tiny right floated pin icon button">
+                    <i class="pin  icon"></i>
+                    保存
+                </button> -->
+
+            </form>
+
+            <!-- <form class="ui form" action="" method="post">
+
+                <button class="ui  tiny  button" type="submit" name="vote" value="like">
+
+                    <i class="caret up icon "></i>
+                    赞同
+                </button>
+
+                <button class="ui tiny button" type="submit" name="vote" value="normal">
+                    <i class="caret down icon "></i>
+                    反对
+                </button>
+
+                <button class="ui secondary circular tiny right floated pin icon button">
+                    <i class="pin  icon"></i>
+                    保存
+                </button>
+
+            </form> -->
+        {% endfor %}
+
+    </div>
+    <div class="ui center aligned very padded vertical segment container">
+        <div class="ui pagination menu ">
+            {% if article_list.has_previous %}
+                <a href="?page={{ article_list.previous_page_number }}" class="item">
+                    <i class="left red arrow icon"></i>
+                </a>
+            {% else %}
+                <a href="?page={{ article_list.start_index }}" class="disabled item">
+                    <i class="left arrow icon"></i>
+                </a>
+            {% endif %}
+            {% for page in article_list.paginator.page_range %}
+                {% if page == article_list.number %}
+                    <a href="?page={{ page }}" class="active red item">
+                        {{ page }}
+                    </a>
+                {% else %}
+                    <a href="?page={{ page }}" class="red item">
+                        {{ page }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            <!-- <a href="#" class=" item">
+                <span class="ui red header">1</span>
+            </a>
+            <a href="#" class=" item">
+                <span class="ui red header">2</span>
+            </a>
+            <a href="#" class="item">
+                <span class="ui red header">3</span>
+            </a>
+            <a href="#" class="item">
+                <span class="ui red header">4</span>
+            </a>
+            <a href="#" class="item">
+                <span class="ui red header">5</span>
+            </a> -->
+            {% if article_list.has_next %}
+                <a href="?page={{ article_list.next_page_number }}" class="item">
+                    <i class="right red arrow icon"></i>
+                </a>
+            {% else %}
+                <a href="?page={{ article_list.end_index }}" class="disabled item">
+                    <i class="right arrow icon"></i>
+                </a>
+            {% endif %}
+            <!-- <a href="#" class="item">
+                <i class="right red arrow icon"></i>
+            </a> -->
+        </div>
+    </div>
+
+</body>
+
+</html>

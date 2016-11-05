@@ -1,0 +1,27 @@
+h1 {
+    font-family:'Oswald', sans-serif;font-size:40px!important;
+}
+
+p {
+    font-family: 'Raleway', sans-serif;
+    font-size:18px;
+}
+
+.ui.vertical.inverted.detail.segment {
+    height: 500px;
+    background-image: url('../images/detail.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.ui.basic.segment.container {
+    margin-top: 30px;
+    width: 700px;
+}
+.ui.basic.segment.container > p {
+    margin-top: 30px;
+    font-size: 20px;
+}
+form {
+    margin-bottom: 200px;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.4/semantic.css" media="screen" title="no title">
+    </head>
+    <body>
+        <div class="ui two column stackable grid container">
+            <div class=" column">
+                <div class="ui green  segment">
+                    <h2 class="ui header">Request-GET</h2>
+                    <form class="ui form" action="http://duckduckgo.com" method="get">
+                        <div class="field">
+                            <label>Content</label>
+                            <input type="text" name="q" value="">
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="ia" value="images">
+                                <label>Search for images </label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="ia" value="web">
+                                <label>Search for web</label>
+                            </div>
+                        </div>
+                        <button class="ui green button" type="Submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <div class="column">
+                <div class="ui blue segment">
+                    <h2 class="ui header">Request-POST</h2>
+                    <form class="ui form" action="http://duckduckgo.com" method="post">
+                        <div class="field">
+                            <label>Content</label>
+                            <input type="text" name="q" value="">
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="ia" value="images">
+                                <label>Search for images </label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio checkbox">
+                                <input type="radio" name="ia" value="web">
+                                <label>Search for web</label>
+                            </div>
+                        </div>
+                        <button class="ui blue button" type="Submit">Submit</button>
+                    </form>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+</html>

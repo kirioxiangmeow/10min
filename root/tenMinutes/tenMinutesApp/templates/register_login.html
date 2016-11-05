@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Play" rel="stylesheet">
+
+    </head>
+
+    <style type="text/css">
+        body {
+            background:url({% static 'images/super_blur_back2.jpg' %});
+            background-size: cover;
+        }
+
+        .ui.grid.divided.segment.container{
+            height: 400px;
+            width:600px !important;
+            border:rgba(255, 0, 0, 0);
+            position: absolute;
+            left: 50%;
+            top:40%;
+            transform: translate(-50%,-50%);
+        }
+
+        .five.wide.column {
+            background:url({% static 'images/red_regi.jpg' %});
+            background-size: cover;
+            background-position: 60% 0%;
+        }
+
+        form {
+            margin-top: 60px;
+        }
+        h1,h3,h4{
+            font-family: 'Play', sans-serif !important;
+
+        }
+    </style>
+
+    <body>
+        <div class="ui grid divided segment container">
+            <div class="five wide  column">
+
+                <h4 class="ui inverted header">
+
+                    <i class="angle left  icon"></i>
+                </h4>
+
+                <h1 class="ui inverted center aligned header" style="font-size: 40px;margin-top:55px">
+                    <p class="sub header">
+                        Welcome to
+                    </p>
+                    10MINs
+                </h1>
+
+
+
+            </div>
+
+            <div class="eleven wide column">
+                {% if 'register' in request.path %}
+                    <h4 class="ui inverted right aligned header">
+                        <a href="{% url 'login' %}" style="color:#ff695e;">or LOGIN</a>
+                    </h4>
+                {% else %}
+                    <h4 class="ui inverted right aligned header">
+                        <a href="{% url 'register' %}" style="color:#ff695e;">or Register</a>
+                    </h4>
+                {% endif %}
+
+                <!-- {% if 'register' in request.path %}
+                    <form class="ui form" method="post">
+                        <div class="field">
+                            <input type="text" name="username" placeholder="用户名">
+                        </div>
+
+                        <div class="field">
+                            <input type="text" name="password1" placeholder="您的密码">
+                        </div>
+                        <div class="field">
+                            <input type="text" name="password2" placeholder="重复密码">
+                        </div>
+                        {% csrf_token %}
+                        <button class="ui inverted red circular right floated button" type="submit">Done</button>
+                    </form>
+                {% else %}
+                    <form class="ui form" method="post">
+                        <div class="field">
+                            <input type="text" name="username" placeholder="用户名">
+                        </div>
+
+                        <div class="field">
+                            <input type="text" name="password" placeholder="您的密码">
+                        </div>
+                        {% csrf_token %}
+                        <button class="ui inverted red circular right floated button" type="submit">Done</button>
+                    </form>
+                {% endif %} -->
+
+                <form class="ui form error" method="post">
+
+                    {% if form.errors %}
+                        <div class="ui error message">
+                            {{ form.errors }}
+                        </div>
+
+                        {% for field in form  %}
+                            <div class="{{ field.errors|yesno:'error, ' }} field">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+
+                    {% else %}
+                        {% for field in form  %}
+                            <div class="field">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+
+                    {% endif %}
+
+                    {% csrf_token %}
+                    <button class="ui inverted red circular right floated button" type="submit">Done</button>
+                </form>
+
+            </div>
+        </div>
+    </body>
+</html>

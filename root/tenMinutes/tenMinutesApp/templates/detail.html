@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}" media="screen" title="no title" charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Raleway" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <div class="ui inverted top fixed menu borderless red menu">
+        <div class="header item">
+            <div class="ui image">
+                <img src="{% static 'images/tenlogo.png' %}" alt="">
+            </div>
+        </div>
+
+        <div class="right menu">
+            {% if request.user.is_authenticated %}
+                <div class="item">
+                    <h5 class="ui inverted header">
+                        <span style="margin-right:20px;">{{ request.user.username }}</span>
+                        <div class="ui mini circular image">
+                            {% if request.user.profile.profile_image %}
+                                <img src="/upload/{{ request.user.profile.profile_image }}" alt="" />
+                            {% else %}
+                                <img src="http://semantic-ui.com/images/avatar/small/matt.jpg" alt="" />
+                            {% endif %}
+                        </div>
+                    </h5>
+                </div>
+                <div class="item">
+                    <a href="{% url 'logout' %}" class="ui inverted circular button">Logout</a>
+                </div>
+
+            {% else %}
+                <div class="item">
+                    <h5 class="ui inverted header">
+                        <span style="margin-right:20px;">{{ request.user.username }}</span>
+                        <div class="ui mini circular image">
+                            <img src="http://semantic-ui.com/images/avatar/small/matt.jpg" alt="" />
+                        </div>
+                    </h5>
+                </div>
+                <div class="item">
+                    <a href="#" class="ui inverted circular button">Signup/Login</a>
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="ui vertical inverted detail segment"></div>
+
+    <div class="ui basic segment container">
+
+        <h1>{{ article.headline }} </h1>
+        <span>{{article.date|date:"Y-m-d"}}</span>
+        <span class="" style="color:rgb(226, 226, 226)">|</span>
+        <i class="icon grey unhide"></i>
+        <span style="color:#bbbbbb">10K</span>
+        <span class="" style="color:rgb(226, 226, 226)">|</span>
+        <i class="icon grey checkmark"></i>
+        <span style="color:#bbbbbb">{{ like_counts }} people like it</span>
+        <p>
+            {{ article.content }}
+            <a href="#">
+                <i class="angle tiny double grey right icon">READMORE</i>
+            </a>
+        </p>
+        <div class="ui divider"></div>
+        <form class="ui form" action="{% url 'vote' article_info.id%}" method="post">
+            {% csrf_token %}
+            {% if user_ticket.choice == 'like' %}
+                <button class="ui red tiny  button" type="submit" name="vote" value="normal">
+                    <i class="caret up icon"></i>
+                    赞同
+                </button>
+
+                <button class="ui  tiny button" type="submit" name="vote" value="dislike">
+                    <i class="caret down icon"></i>
+                    反对
+                </button>
+            {% elif user_ticket.choice == 'dislike'%}
+                <button class="ui  tiny  button" type="submit" name="vote" value="like">
+                    <i class="caret up icon"></i>
+                    赞同
+                </button>
+
+                <button class="ui red tiny button" type="submit" name="vote" value="normal">
+                    <i class="caret down icon"></i>
+                    反对
+                </button>
+            {% else %}
+                <button class="ui  tiny  button" type="submit" name="vote" value="like">
+                    <i class="caret up icon"></i>
+                    赞同
+                </button>
+
+                <button class="ui  tiny button" type="submit" name="vote" value="dislike">
+                    <i class="caret down icon"></i>
+                    反对
+                </button>
+            {% endif %}
+            <button class="ui secondary circular tiny right floated pin icon button">
+                <i class="pin  icon"></i>
+                保存
+            </button>
+
+        </form>
+        <div class="ui horizontal divider " ><strong><h3 class="ui header" >COMMENT</h3></strong></div>
+
+
+
+
+        <div class="ui comments">
+
+            {% if best_comment %}
+                <div class="ui mini red left ribbon label">
+                    <i class="icon fire"></i>
+                    BEST
+                </div>
+                <div class="best comment">
+                    <a class="avatar">
+                        <img src="{% static 'images/matt.jpg' %}">
+                    </a>
+                    <div class="content">
+                        <a class="author">{{ best_comment.name }}</a>
+                        <div class="metadata">
+                            <span class="date">{{ comment.date }}</span>
+                        </div>
+                        <p class="text" style="font-family: 'Raleway', sans-serif;">
+                            {{ best_comment.comment }}
+                        </p>
+                    </div>
+                </div>
+                <div class="ui divider"></div>
+            {% endif %}
+
+
+
+
+            {% for comment in article.under_comments.all %}
+
+                <div class="comment">
+                    <a class="avatar">
+                        <img src="{% static 'images/matt.jpg' %}">
+                    </a>
+                    <div class="content">
+                        <a class="author">{{ comment.name }}</a>
+                        <div class="metadata">
+                            <span class="date">{{ comment.date }}</span>
+                        </div>
+                        <p class="text" style="font-family: 'Raleway', sans-serif;">
+                            {{ comment.comment }}
+                        </p>
+
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="ui divider"></div>
+
+        <form class="ui error tiny form" action="{% url 'comment' article.id %}"method="post">
+            {% if form.errors %}
+
+                <div class="ui error message">
+                    {{ form.errors }}
+                </div>
+                {% for field in form %}
+                    <div class="{{ field.errors|yesno:'error, '}} field">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+            {% else %}
+                {% for field in form %}
+                    <div class="field">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+            {% endif %}
+            {% csrf_token %}
+            <button type="submit" class="ui red button">Submit</button>
+        </form>
+
+
+
+
+
+    </div>
+
+
+</body>
+
+</html>
